@@ -22,12 +22,13 @@ public class SOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    private SUser sUser;
-    private LocalDateTime createTime;
+
     private Integer status;
     private Integer request;
     private Integer quantity;
+    private LocalDateTime createTime;
+    @ManyToOne
+    private SUser sUser;
     @OneToOne
     private Product product;
 }
