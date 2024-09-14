@@ -35,7 +35,7 @@ public class TokenProvider {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public String geneateToken(SUser user, Duration expriedAt) {
+    public String generateToken(SUser user, Duration expriedAt) {
         Date now = new Date();
         return createToken(new Date(now.getTime() + expriedAt.toMillis()), user);
     }

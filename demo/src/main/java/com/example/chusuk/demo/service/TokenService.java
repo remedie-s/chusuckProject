@@ -31,7 +31,7 @@ public class TokenService {
         }
         Integer suserId = findByRefreshToken(refreshToken).getSuserid();
         SUser suser = sUserService.findById(suserId);
-        return tokenProvider.geneateToken(suser, Duration.ofHours(hour));
+        return tokenProvider.generateToken(suser, Duration.ofHours(hour));
     }
 
     public RefreshToken findByRefreshToken(String refreshToken) {
@@ -51,6 +51,7 @@ public class TokenService {
     }
 
     public void saveRefreshToken(Integer id, String token) {
+        System.out.println("Saving refresh token: sUserId=" + id + ", token=" + token);
         RefreshToken refreshToken = new RefreshToken(id, token);
         this.refreshTokenRepository.save(refreshToken);
     }

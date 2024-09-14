@@ -37,20 +37,20 @@ public class SUserController {
     private final JwtProperties jwtProperties;
     private final UtilService utilService;
 
-    @RequestMapping("/")
+    @GetMapping("/{id}")
     public String usermain(@PathVariable("id") Integer id, Model model) {
         this.sUserService.findById(id);
-
         return "user_main";
     }
 
     @GetMapping("/signup")
-    public String signup(SUserForm sUserForm) {
+    public String signup(Model model) {
+        model.addAttribute("sUserForm", new SUserForm());
         return "signup_form";
     }
 
     @PostMapping("/signup")
-    public String sighup(@Valid SUserForm sUserForm, BindingResult bindingResult, HttpServletResponse response) {
+    public String signup(@Valid SUserForm sUserForm, BindingResult bindingResult, HttpServletResponse response) {
         System.out.println("가입요청");
         if (bindingResult.hasErrors()) {
             System.out.println("에러발생" + bindingResult.getAllErrors().size());
@@ -80,9 +80,9 @@ public class SUserController {
             bindingResult.reject("signupError", "회원가입 오류입니다.");
             return "signup_form";
         }
-        String accessToken = this.tokenProvider.geneateToken(sUser, Duration.ofDays(7));
-        String refreshToken = this.tokenProvider.geneateToken(sUser, Duration.ofDays(30));
-
+        String accessToken = this.tokenProvider.generateToken(sUser, Duration.ofDays(7));
+        String refreshToken = this.tokenProvider.generateToken(sUser, Duration.ofDays(30));
+        System.out.println(sUser.getId());
         this.tokenService.saveRefreshToken(sUser.getId(), refreshToken);
         utilService.setCookie("access_token", accessToken, utilService.toSecondOfDay(7), response);
         utilService.setCookie("refresh_token", refreshToken, utilService.toSecondOfDay(30), response);

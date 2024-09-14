@@ -24,13 +24,13 @@ public class RefreshToken {
     @Column(nullable = false)
     private String refreshToken;
 
-    private LocalDateTime createdate;
+    private LocalDateTime createDate;
 
     public RefreshToken(Integer suserid, String refreshToken) {
         super();
         this.suserid = suserid;
         this.refreshToken = refreshToken;
-        this.createdate = LocalDateTime.now();
+        this.createDate = LocalDateTime.now();
     }
 
     public RefreshToken update(String newRefreshToken) {
