@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 public class RefreshToken {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
