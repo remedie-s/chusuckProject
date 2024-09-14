@@ -1,8 +1,13 @@
 package com.example.chusuk.demo.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class SUserForm {
     @Size(min = 3, max = 30)
     @NotEmpty(message = "아이디를 입력하세요")
@@ -18,6 +23,7 @@ public class SUserForm {
     @NotEmpty(message = "핸드폰번호를 입력하세요")
     private String phoneNumber;
     @NotEmpty(message = "이메일을 입력하세요")
+    @Email
     private String eMail;
 
 }

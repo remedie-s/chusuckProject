@@ -19,14 +19,14 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "suserid", updatable = false)
-    private long suserid;
+    private Integer suserid;
 
     @Column(nullable = false)
     private String refreshToken;
 
     private LocalDateTime createdate;
 
-    public RefreshToken(long suserid, String refreshToken) {
+    public RefreshToken(Integer suserid, String refreshToken) {
         super();
         this.suserid = suserid;
         this.refreshToken = refreshToken;
