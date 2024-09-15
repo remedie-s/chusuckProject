@@ -79,7 +79,8 @@ public class ProductController {
         Product product;
 
         product = this.productService.create(productForm.getProductName(), productForm.getDescription(),
-                productForm.getPrice(), productForm.getQuantity(), productForm.getImageUrl());
+                productForm.getPrice(), productForm.getQuantity(), productForm.getCategory(),
+                productForm.getImageUrl());
         System.out.println("물품등록 완료");
 
         return "redirect:/product/list";
@@ -94,6 +95,7 @@ public class ProductController {
         productForm.setDescription(product.getDescription());
         productForm.setPrice(product.getPrice());
         productForm.setQuantity(product.getQuantity());
+        productForm.setCategory(product.getCategory());
         productForm.setImageUrl(product.getImageUrl());
         model.addAttribute("method", "put");
 
@@ -112,6 +114,7 @@ public class ProductController {
         product.setDescription(productForm.getDescription());
         product.setPrice(productForm.getPrice());
         product.setQuantity(productForm.getQuantity());
+        product.setCategory(productForm.getCategory());
         product.setImageUrl(productForm.getImageUrl());
 
         this.productService.modify(product);

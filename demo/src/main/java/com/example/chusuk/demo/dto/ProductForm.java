@@ -14,6 +14,7 @@ public class ProductForm {
     private String description;
     private Long price;
     private Integer quantity;
+    private Integer category;
     @NotEmpty
     private String imageUrl;
 

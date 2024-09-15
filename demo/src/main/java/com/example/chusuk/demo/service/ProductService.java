@@ -22,13 +22,14 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    public Product create(String productName, String description, Long price, Integer quantity,
+    public Product create(String productName, String description, Long price, Integer quantity, Integer category,
             String imageUrl) {
         Product p = new Product();
         p.setProductName(productName);
         p.setDescription(description);
         p.setPrice(price);
         p.setQuantity(quantity);
+        p.setCategory(category);
         p.setImageUrl(imageUrl);
         p.setCreateDate(LocalDateTime.now());
         this.productRepository.save(p);

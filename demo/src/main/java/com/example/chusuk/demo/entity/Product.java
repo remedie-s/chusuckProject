@@ -31,6 +31,7 @@ public class Product {
     private Integer quantity;
     private String imageUrl;
     private LocalDateTime createDate;
+    private Integer category;
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<PReview> pReviewList;
