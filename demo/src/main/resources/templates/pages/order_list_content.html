@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<div th:fragment="frag_index_content" class="content-wrapper">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">주문 목록</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-12 col-12">
+
+                    <table class="table">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>No</th>
+                                <th>제품이미지</th>
+                                <th>제품이름 </th>
+                                <th>제품가격</th>
+                                <th>제품수량</th>
+                                <th>제품별총가격</th>
+                                <th>주문 상태</th>
+                                <th>주문 시간</th>
+                                <th>반품 신청</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="orderListDto, idx : ${orderlist}"> <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
+                                <td>
+                                    <span th:text="${orderListDto.orderid}"></span>
+                                </td>
+                                <td>
+                                    <img th:src="${orderListDto.image_url}" alt="Product Image"
+                                        style="width: 100px; height: auto;">
+                                </td>
+                                <td>
+                                    <span th:text="${orderListDto.product_name}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${orderListDto.product_price}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${orderListDto.quantity}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${orderListDto.subtotal}"></span>
+                                </td>
+                                <td th:switch="${orderListDto.status}">
+                                    <span th:case="0"> 주문접수 </span>
+                                    <span th:case="1"> 주문승인 </span>
+                                    <span th:case="2"> 배송도착 </span>
+                                    <span th:case="3"> 주문닫힘 </span>
+                                </td>
+                                <td>
+                                    <span th:text="${orderListDto.create_time}"></span>
+                                </td>
+                                
+                                <td>                                    
+                                    <a th:href="@{|/order/delete/${ orderListDto.orderid }|}"> 반품신청 </a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    
+                    <a th:href="@{/order/seller/list}" class="btn btn-primary"> 관리자 관리 </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h3 class="m-0">주문 총 가격 <br> <span th:text=|${ordersum}원|> </span></h3>
+                </div>
+            </div><!-- /.row -->
+        </div>
+    </section>
+
+</div>

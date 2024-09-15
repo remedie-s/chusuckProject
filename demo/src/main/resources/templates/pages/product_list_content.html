@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<div th:fragment="frag_index_content" class="content-wrapper">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Product 목록</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-12 col-12">
+
+                    <table class="table">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>제품 번호</th>
+                                <th>제품 사진</th>
+                                <th>물품명</th>
+                                <th>물품 설명 </th>
+                                <th>물품 가격</th>
+                                <th>물품 재고량</th>
+                                <th>삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="product, idx : ${productslist}"> <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
+                                <td>
+                                    <span th:text="${product.id}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{|/product/detail/${ product.id }|}" > 
+                                    <img th:src="${product.image_url}"width="100" height="100"/></a>
+                                </td>
+                                <td>
+                                    <span th:text="${product.product_name}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${product.description}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${product.product_price}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${product.product_quantity}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{|/product/delete/${ product.id }|}" >   삭제  </a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!--/* TODO 0808 3 : Post 등록 진입버튼  */-->
+                    <a th:href="@{/product/create}" class="btn btn-dark">product 등록</a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
