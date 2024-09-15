@@ -42,8 +42,8 @@ public class TokenService {
         throw new DataNotFoundException("user not found");
     }
 
-    public RefreshToken findByUserId(Integer SUserid) {
-        Optional<RefreshToken> opt = this.refreshTokenRepository.findById(SUserid);
+    public RefreshToken findByUserId(Integer sUserid) {
+        Optional<RefreshToken> opt = this.refreshTokenRepository.findById(sUserid);
         if (opt.isPresent()) {
             return opt.get();
         }

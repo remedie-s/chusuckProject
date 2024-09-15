@@ -87,7 +87,7 @@ public class SUserController {
         utilService.setCookie("access_token", accessToken, utilService.toSecondOfDay(7), response);
         utilService.setCookie("refresh_token", refreshToken, utilService.toSecondOfDay(30), response);
 
-        return "redirect:/user/login";
+        return "redirect:/suser/login";
     }
 
     @GetMapping("/login")

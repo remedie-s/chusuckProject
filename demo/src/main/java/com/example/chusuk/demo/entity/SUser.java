@@ -40,6 +40,18 @@ public class SUser {
     private LocalDateTime createDate;
     private Integer userGrade = 0;
 
+    public SUser(String username, String password, String firstName, String lastName, String phoneNumber, String eMail,
+            LocalDateTime createDate, Integer userGrade) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.eMail = eMail;
+        this.createDate = createDate;
+        this.userGrade = userGrade;
+    }
+
     @JsonIgnore
     @OneToOne(mappedBy = "sUser", cascade = CascadeType.REMOVE)
     private SCart sCart;

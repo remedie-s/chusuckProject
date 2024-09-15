@@ -25,7 +25,7 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">로그인</p>
 
-      <form action="/user/login" method="post">
+      <form action="/suser/login" method="post">
 		<!-- 로그인이 실패할 경우에는 시큐리티의 기능으로 인해 로그인 
 			페이지로 리다이렉트된다. 이때 페이지 매개변수로 error가 함께 전달된다. 
 			따라서 로그인 페이지의 매개변수로 error가 전달될 경우-->
@@ -69,7 +69,7 @@
     </div>
     <!-- /.login-card-body -->
     <div class="card-footer">
-	   	<a href="/spuser/signup" sec:authorize="isAnonymous()" class="btn btn-success">회원가입</a>
+	   	<a href="/suser/signup" sec:authorize="isAnonymous()" class="btn btn-success">회원가입</a>
     </div>
   </div>
 </div>
