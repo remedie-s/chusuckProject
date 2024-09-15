@@ -1,6 +1,7 @@
 package com.example.chusuk.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -13,4 +14,8 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
 }

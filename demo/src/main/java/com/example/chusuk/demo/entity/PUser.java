@@ -22,7 +22,7 @@ public class PUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @OneToOne
     private SUser sUser;
