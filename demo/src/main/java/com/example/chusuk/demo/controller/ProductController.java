@@ -148,7 +148,7 @@ public class ProductController {
             BindingResult bindingResult,
             Principal principal) {
         String name = principal.getName();
-        Integer userid = this.sUserService.findbyUsername(name).getId();
+        Integer userid = this.sUserService.findByUsername(name).getId();
         Integer productid = id;
         Product product = this.productService.findById(productid);
         List<PUser> costomerList = product.getPUserList();
@@ -160,7 +160,7 @@ public class ProductController {
                     System.out.println("리뷰 쓰기 중 에러가 있어요!");
                     return "product_list";
                 }
-                this.pReviewService.create(reviewForm.getContent(), product, this.sUserService.findbyUsername(name));
+                this.pReviewService.create(reviewForm.getContent(), product, this.sUserService.findByUsername(name));
                 System.out.println("리뷰 등록 완료");
                 return "redirect:/product/detail/" + id;
             }
@@ -173,7 +173,7 @@ public class ProductController {
     @GetMapping("/review/delete/{id}")
     public String reviewDelete(Model model, @PathVariable("id") Integer id, Principal principal) {
         String name = principal.getName();
-        Integer userid = this.sUserService.findbyUsername(name).getId();
+        Integer userid = this.sUserService.findByUsername(name).getId();
         PReview review = this.pReviewService.selectOneReview(id);
         Integer productid = review.getProduct().getId();
         if (review.getSUser().getId() == userid || name.equals("admin") || name.equals("seller")) {

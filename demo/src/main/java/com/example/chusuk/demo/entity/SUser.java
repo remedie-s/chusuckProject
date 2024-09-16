@@ -12,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,8 +52,8 @@ public class SUser {
     }
 
     @JsonIgnore
-    @OneToOne(mappedBy = "sUser", cascade = CascadeType.REMOVE)
-    private SCart sCart;
+    @OneToMany(mappedBy = "sUser", cascade = CascadeType.REMOVE)
+    private List<SCart> sCartList;
     @JsonIgnore
     @OneToMany(mappedBy = "sUser", cascade = CascadeType.REMOVE)
     private List<SAddress> addressList;

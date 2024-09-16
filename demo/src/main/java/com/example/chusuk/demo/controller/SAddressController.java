@@ -32,7 +32,7 @@ public class SAddressController {
     @GetMapping("/list")
     public String addressList(Principal principal) {
         String name = principal.getName();
-        SUser user = sUserService.findbyUsername(name);
+        SUser user = sUserService.findByUsername(name);
         Integer id = user.getId();
         return "redirect:/address/list/" + id;
     }
@@ -40,7 +40,7 @@ public class SAddressController {
     @GetMapping("/list/{id}")
     public String addressList(Model model, @PathVariable("id") Integer id, Principal principal) {
         String name = principal.getName();
-        SUser user = sUserService.findbyUsername(name);
+        SUser user = sUserService.findByUsername(name);
         List<SAddress> addresslist = user.getAddressList();
         model.addAttribute("addresslist", addresslist);
         return "address_list";
@@ -56,7 +56,7 @@ public class SAddressController {
     @GetMapping("/create")
     public String AddressCreate(SAddressForm sAddressForm, Principal principal, Model model) {
         String name = principal.getName();
-        SUser user = sUserService.findbyUsername(name);
+        SUser user = sUserService.findByUsername(name);
         Integer id = user.getId();
         model.addAttribute("sAddressForm", new SAddressForm());
         return "addressform";
@@ -67,7 +67,7 @@ public class SAddressController {
             Model model, Principal principal) {
         String name = principal.getName();
         System.out.println("1");
-        SUser user = sUserService.findbyUsername(name);
+        SUser user = sUserService.findByUsername(name);
         Integer id = user.getId();
         // 같은지 검증할까?
         SAddress address;
@@ -86,7 +86,7 @@ public class SAddressController {
     public String AddressModify(Model model, SAddressForm sAddressForm, @PathVariable("id") Integer id,
             Principal principal) {
         String name = principal.getName();
-        SUser user = sUserService.findbyUsername(name);
+        SUser user = sUserService.findByUsername(name);
         id = user.getId();
         SAddress sAddress = this.sAddressService.getoneAddress(id);
         sAddressForm.setBuildingNumber(sAddress.getBuildingNumber());

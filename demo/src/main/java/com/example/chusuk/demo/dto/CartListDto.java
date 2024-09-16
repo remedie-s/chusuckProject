@@ -1,15 +1,16 @@
 package com.example.chusuk.demo.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SCartForm {
+public class CartListDto {
 
     private Integer id;
-    private LocalDateTime createTime;
+    private String imageUrl;
+    private String productName;
+    private Long Price;
     private Integer quantity;
+    private Long subtotal;
 }
