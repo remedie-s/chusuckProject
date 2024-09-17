@@ -44,11 +44,11 @@
               <tr th:each="orderListDto, idx : ${orderlist}">
                 <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
                 <td>
-                  <span th:text="${orderListDto.orderid}"></span>
+                  <span th:text="${orderListDto.sOrder.id}"></span>
                 </td>
                 <td>
                   <img
-                    th:src="${orderListDto.image_url}"
+                  th:src="${orderListDto.product.imageUrl}"
                     alt="Product Image"
                     style="width: 100px; height: auto"
                   />
@@ -65,7 +65,7 @@
                 <td>
                   <span th:text="${orderListDto.subtotal}"></span>
                 </td>
-                <td th:switch="${orderListDto.status}">
+                <td th:switch="${orderListDto.sOrder.status}">
                   <span th:case="0"> 주문접수 </span>
                   <span th:case="1"> 주문승인 </span>
                   <span th:case="2"> 배송도착 </span>
@@ -75,7 +75,7 @@
                   <span th:text="${orderListDto.sOrder.createDate}"></span>
                 </td>
                 <td>
-                  <a th:href="@{|/order/accept/${ orderListDto.orderid }|}">
+                  <a th:href="@{|/order/accecpt/${ orderListDto.sOrder.id }|}">
                     주문승인
                   </a>
                 </td>

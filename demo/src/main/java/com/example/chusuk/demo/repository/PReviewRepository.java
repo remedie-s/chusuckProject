@@ -8,6 +8,6 @@ import com.example.chusuk.demo.entity.PReview;
 
 public interface PReviewRepository extends JpaRepository<PReview, Integer> {
 
-    List<PReview> findByProductId(Integer id);
+    List<PReview> findByProduct_Id(Integer id);
 
 }

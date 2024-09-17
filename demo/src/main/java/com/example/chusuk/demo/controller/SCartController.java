@@ -81,8 +81,8 @@ public class SCartController {
         return "cart_list";
     }
 
-    @PostMapping("/add/{id}")
-    public String addCart(@PathVariable("id") Integer id,
+    @PostMapping("/add")
+    public String addCart(
             @Valid SCartForm sCartForm, BindingResult bindingResult,
             Model model, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -105,16 +105,17 @@ public class SCartController {
         }
 
         Integer quantity = sCartForm.getQuantity();
+        Integer productid = sCartForm.getProductid();
         // 브라우저에서 정상적으로 넘오는지 확인
-
+        System.out.println(productid);
         System.out.println(quantity);
         if (scart.isEmpty()) {
             System.out.println("카트값 널인지 확인");
             SCart cart = new SCart();
             cart.setSUser(user);
-            cart.setProduct(this.productService.findById(id));
+            cart.setProduct(this.productService.findById(productid));
             cart.setQuantity(quantity);
-            cart.setCreateTime(LocalDateTime.now());
+            cart.setCreateDate(LocalDateTime.now());
             this.sCartService.save(cart);
             return "redirect:/cart/list/" + userid;
         }
@@ -123,7 +124,7 @@ public class SCartController {
         boolean productIsPresent = false;
         if (!scart.isEmpty()) {
             for (SCart sCarts : scart) {
-                if (sCarts.getProduct().getId().equals(id)) {
+                if (sCarts.getProduct().getId().equals(productid)) {
                     // 프러덕트 아이디를 받아와서 확인
                     sCarts.setQuantity(sCarts.getQuantity() + quantity);
                     productIsPresent = true;
@@ -137,9 +138,9 @@ public class SCartController {
             System.out.println("물건이 없음");
             SCart scart1 = new SCart();
             scart1.setSUser(user);
-            scart1.setProduct(this.productService.findById(id));
+            scart1.setProduct(this.productService.findById(productid));
             scart1.setQuantity(quantity);
-            scart1.setCreateTime(LocalDateTime.now());
+            scart1.setCreateDate(LocalDateTime.now());
             System.out.println("물건이 없을때 넣는값" + scart1);
             this.sCartService.save(scart1);
         }

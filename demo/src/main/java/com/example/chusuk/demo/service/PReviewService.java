@@ -20,17 +20,17 @@ public class PReviewService {
     private final PReviewRepository pReviewRepository;
 
     public List<PReview> findByProductId(Integer id) {
-        List<PReview> reviewList = this.pReviewRepository.findByProductId(id);
+        List<PReview> reviewList = this.pReviewRepository.findByProduct_Id(id);
         if (!reviewList.isEmpty()) {
             return reviewList;
         }
-        throw new DataNotFoundException("review not found");
+        throw new DataNotFoundException("review not found for productId: " + id);
     }
 
     public PReview create(String content, Product product, SUser sUser) {
         PReview pReview = new PReview();
         pReview.setContent(content);
-        pReview.setCreateTime(LocalDateTime.now());
+        pReview.setCreateDate(LocalDateTime.now());
         pReview.setProduct(product);
         pReview.setSUser(sUser);
         try {

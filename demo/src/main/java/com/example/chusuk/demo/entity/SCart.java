@@ -12,18 +12,17 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
-@ToString
+
 @NoArgsConstructor
 public class SCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime createTime;
+    private LocalDateTime createDate;
     private Integer quantity;
 
     @ManyToOne

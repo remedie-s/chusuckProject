@@ -24,7 +24,7 @@ public class QReview {
 
     private String content;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createDate;
 
     @ManyToOne
     private SUser sUser;

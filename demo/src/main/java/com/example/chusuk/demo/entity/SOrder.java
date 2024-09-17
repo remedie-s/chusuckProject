@@ -26,7 +26,7 @@ public class SOrder {
     private Integer status;
     private Integer request;
     private Integer quantity;
-    private LocalDateTime createTime;
+    private LocalDateTime createDate;
     @ManyToOne
     private SUser sUser;
     @OneToOne

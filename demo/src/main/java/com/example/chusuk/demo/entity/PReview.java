@@ -10,12 +10,10 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
-@ToString
 @NoArgsConstructor
 public class PReview {
     @Id
@@ -24,7 +22,7 @@ public class PReview {
 
     private String content;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createDate;
 
     @ManyToOne
     private Product product;

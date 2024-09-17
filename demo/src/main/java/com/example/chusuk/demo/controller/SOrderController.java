@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.chusuk.demo.dto.OrderListDto;
 import com.example.chusuk.demo.dto.SCartForm;
 import com.example.chusuk.demo.dto.SOrderForm;
+import com.example.chusuk.demo.entity.PUser;
 import com.example.chusuk.demo.entity.Product;
 import com.example.chusuk.demo.entity.SCart;
 import com.example.chusuk.demo.entity.SOrder;
 import com.example.chusuk.demo.entity.SUser;
+import com.example.chusuk.demo.service.PUserService;
 import com.example.chusuk.demo.service.ProductService;
 import com.example.chusuk.demo.service.SCartService;
 import com.example.chusuk.demo.service.SOrderService;
@@ -31,7 +33,9 @@ import com.example.chusuk.demo.service.SUserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/order")
@@ -41,6 +45,7 @@ public class SOrderController {
     private final SCartService sCartService;
     private final SUserService sUserService;
     private final ProductService productService;
+    private final PUserService pUserService;
 
     @GetMapping("/list")
     public String orderList(Principal principal) {
@@ -56,20 +61,18 @@ public class SOrderController {
         String name = principal.getName();
         SUser user = sUserService.findByUsername(name);
         Integer userId = user.getId();
-        if (principal.getName().equals("seller") || principal.getName().equals("admin")) {
-            return "order_seller_list";
-        }
-        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createTime"));
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
 
         Page<SOrder> sOrderPage = sOrderService.findBySUserId(userId, pageable);
-
         ArrayList<OrderListDto> orderList = new ArrayList<>();
         Long orderSum = 0L;
         for (SOrder sOrder : sOrderPage.getContent()) {
             OrderListDto orderListDto = new OrderListDto();
             orderListDto.setProduct(sOrder.getProduct());
+            System.out.println(sOrder.getProduct());
             orderListDto.setSOrder(sOrder);
             orderListDto.setSUser(sOrder.getSUser());
+            orderListDto.setSubtotal(sOrder.getQuantity() * sOrder.getProduct().getPrice());
             orderList.add(orderListDto);
             Integer quantity = sOrder.getQuantity();
             Long price = sOrder.getProduct().getPrice();
@@ -133,7 +136,7 @@ public class SOrderController {
                 sOrder.setSUser(user);
                 sOrder.setProduct(orderedProduct);
                 sOrder.setQuantity(sCart.getQuantity());
-                sOrder.setCreateTime(LocalDateTime.now());
+                sOrder.setCreateDate(LocalDateTime.now());
                 sOrder.setStatus(0);
                 sOrder.setRequest(0);
                 this.sOrderService.save(sOrder);
@@ -162,7 +165,7 @@ public class SOrderController {
             return "order_list";
         }
 
-        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createTime"));
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<SOrder> sOrderPage;
         try {
             sOrderPage = this.sOrderService.getAllOrder(pageable);
@@ -181,8 +184,10 @@ public class SOrderController {
             if (!sOrder.getStatus().equals(3)) {
                 OrderListDto orderListDto = new OrderListDto();
                 orderListDto.setProduct(sOrder.getProduct());
+                System.out.println(sOrder.getProduct());
                 orderListDto.setSOrder(sOrder);
                 orderListDto.setSUser(sOrder.getSUser());
+                orderListDto.setSubtotal(sOrder.getQuantity() * sOrder.getProduct().getPrice());
                 orderList.add(orderListDto);
                 Integer quantity = sOrder.getQuantity();
                 Long price = sOrder.getProduct().getPrice();
@@ -197,5 +202,154 @@ public class SOrderController {
         model.addAttribute("totalItems", sOrderPage.getTotalElements());
 
         return "order_seller_list";
+    }
+
+    @GetMapping("/seller/list/complete")
+    public String orderSellerListCom(Principal principal,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            Model model) {
+
+        if (!principal.getName().equals("seller") && !principal.getName().equals("admin")) {
+            return "order_list";
+        }
+
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
+        Page<SOrder> sOrderPage;
+        try {
+            sOrderPage = this.sOrderService.getAllOrder(pageable);
+            if (sOrderPage == null) {
+                sOrderPage = Page.empty();
+            }
+        } catch (Exception e) {
+            sOrderPage = Page.empty();
+            e.printStackTrace();
+            return "index";
+        }
+
+        ArrayList<OrderListDto> orderList = new ArrayList<>();
+        Long orderSum = 0L;
+        for (SOrder sOrder : sOrderPage.getContent()) {
+            if (sOrder.getStatus().equals(3)) {
+                OrderListDto orderListDto = new OrderListDto();
+                orderListDto.setProduct(sOrder.getProduct());
+                System.out.println(sOrder.getProduct());
+                orderListDto.setSOrder(sOrder);
+                orderListDto.setSUser(sOrder.getSUser());
+                orderListDto.setSubtotal(sOrder.getQuantity() * sOrder.getProduct().getPrice());
+                orderList.add(orderListDto);
+                Integer quantity = sOrder.getQuantity();
+                Long price = sOrder.getProduct().getPrice();
+                orderSum += quantity * price;
+            }
+        }
+
+        model.addAttribute("orderSum", orderSum);
+        model.addAttribute("orderList", orderList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", sOrderPage.getTotalPages());
+        model.addAttribute("totalItems", sOrderPage.getTotalElements());
+
+        return "order_seller_list";
+    }
+
+    @GetMapping("/accept/{id}")
+    public String accept(@PathVariable("id") Integer id, Principal principal) {
+        // 아이디가 셀러 혹은 어드민일 경우에만 주문상태 변경가능
+
+        if (principal.getName().equals("seller") || principal.getName().equals("admin")) {
+            // 모델로 받는게 나을려나
+            System.out.println("찾기 시작");
+            SOrder order = this.sOrderService.getOneOrder(id);
+            System.out.println("오더하나 찾기");
+            order.setRequest(1);
+            System.out.println("리퀘스트 상태 바꿈");
+            order.setStatus(1);
+            System.out.println("오더상태 바꿈");
+            this.sOrderService.save(order);
+            System.out.println("오더 저장");
+            return "redirect:/order/seller/list";
+        } else {
+            System.out.println("권한이 없습니다");
+            return "order_list";
+        }
+    }
+
+    @GetMapping("/refund/{id}")
+    public String refund(@PathVariable("id") Integer id, Principal principal) {
+        // 아이디가 셀러 혹은 어드민일 경우에만 주문상태 변경가능
+        System.out.println("찾기 시작");
+        SOrder order = this.sOrderService.getOneOrder(id);
+        System.out.println("오더하나 찾기");
+
+        if (principal.getName().equals(this.sUserService.findById(id).getUsername())) {
+            System.out.println("동일성 검사");
+
+            order.setRequest(10);
+            System.out.println("리퀘스트 상태 바꿈");
+            order.setStatus(10);
+            System.out.println("오더상태 바꿈");
+            this.sOrderService.save(order);
+            System.out.println("오더 저장");
+            return "redirect:/order/seller/list";
+        } else {
+            System.out.println("권한이 없습니다");
+            return "order_list";
+        }
+    }
+
+    @GetMapping("/arrive/{id}")
+    public String arrive(@PathVariable("id") Integer id, SOrderForm spOrderForm, Model model, Principal principal) {
+        if (principal.getName().equals("seller") || principal.getName().equals("admin")) {
+            SOrder order = this.sOrderService.getOneOrder(id);
+            order.setStatus(2);
+            this.sOrderService.save(order);
+            return "redirect:/order/seller/list";
+        } else {
+            System.out.println("권한이 없습니다");
+            return "order_list";
+
+        }
+    }
+
+    @GetMapping("/end/{id}")
+    public String end(@PathVariable("id") Integer id, SOrderForm spOrderForm, Model model, Principal principal) {
+        if (principal.getName().equals("seller") || principal.getName().equals("admin")) {
+            SOrder order = this.sOrderService.getOneOrder(id);
+            order.setStatus(3);
+            this.sOrderService.save(order);
+
+            SUser user = order.getSUser();
+            Product product = order.getProduct();
+            this.pUserService.create(user, product, LocalDateTime.now());
+            return "redirect:/order/seller/list";
+
+        } else {
+            System.out.println("권한이 없습니다");
+            return "order_list";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer id, Principal principal) {
+        if (principal.getName().equals("seller") || principal.getName().equals("admin")) {
+            SOrder order = this.sOrderService.getOneOrder(id);
+            Integer userId = order.getSUser().getId();
+            // 오더 수량만큼 재고 수량에 + 할까? 망실물도있을껀데 농산물은 반품안되긴할껀데
+            Product product = order.getProduct();
+            product.setQuantity(product.getQuantity() + order.getQuantity());
+            this.productService.save(product);
+            this.sOrderService.delete(order);
+            System.out.println("반품 완료");
+            PUser findbyId = this.pUserService.findbyId(userId);
+            this.pUserService.deleteByPUser(findbyId);
+            System.out.println("리뷰허용자목록 삭제 완료");
+
+            return "redirect:/order/list";
+        } else {
+            System.out.println("권한이 없습니다");
+            return "order_list";
+        }
+
     }
 }

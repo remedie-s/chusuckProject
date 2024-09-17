@@ -14,5 +14,6 @@ public class OrderListDto {
     private SUser sUser;
     private Product product;
     private SOrder sOrder;
+    private Long subtotal;
 
 }

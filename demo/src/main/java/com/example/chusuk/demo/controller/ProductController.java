@@ -1,7 +1,6 @@
 package com.example.chusuk.demo.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,9 @@ import com.example.chusuk.demo.service.SUserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
@@ -46,16 +47,17 @@ public class ProductController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, ProductForm productForm, SCartForm sCartForm) {
-        PReviewForm pReviewForm = new PReviewForm();
-        Product product = this.productService.findById(id);
-        List<PReview> reviewList = this.pReviewService.findByProductId(id);
-        if (reviewList.isEmpty()) {
-            reviewList = new ArrayList<>();
-        }
+    public String detail(@PathVariable("id") Integer id, ProductForm productForm, SCartForm sCartForm,
+            PReviewForm pReviewForm, Model model) {
 
+        Product product = this.productService.findById(id);
+        log.info("제품세팅");
+        List<PReview> reviewList = this.pReviewService.findByProductId(id);
+        log.info("리뷰세팅");
+        model.addAttribute("sCartForm", new SCartForm());
         model.addAttribute("product", product);
         model.addAttribute("reviewlist", reviewList);
+        log.info("세팅완료");
         return "product_detail";
 
     }
@@ -86,7 +88,7 @@ public class ProductController {
                 productForm.getPrice(), productForm.getQuantity(), productForm.getCategory(),
                 productForm.getImageUrl());
         System.out.println("물품등록 완료");
-
+        this.pReviewService.create("바르고 고운말로 작성해주세요", product, this.sUserService.findById(1));
         return "redirect:/product/list";
         // 상품 디테일 페이지로 가게 해야되나?
         // TODO 물건 카테고리 추가요망
