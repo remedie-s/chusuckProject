@@ -32,16 +32,16 @@
                     <div class="container my-3">
                         <div class="card my-3">
                             <div class="card-header">
-                                제품명 <h3 th:text="${product.product_name}"></h3>
+                                제품명 <h3 th:text="${product.productName}"></h3>
                             </div>
                             <div class="card-body">
                              제품 설명 :   <span class="card-text" th:text="${product.description}"></span>
                              <br>
-                             제품 가격 :  <span class="card-text" th:text="${product.product_price}"></span>
+                             제품 가격 :  <span class="card-text" th:text="${product.price}"></span>
                              <br>
-                             제품 재고 :   <span class="card-text" th:text="${product.product_quantity}"></span>
+                             제품 재고 :   <span class="card-text" th:text="${product.quantity}"></span>
                              <br>
-                             제품 사진 URL :  <a class="card-text" th:href="${product.image_url}"><span th:text="${product.image_url}"> </span>
+                             제품 사진 URL :  <a class="card-text" th:href="${product.imageUrl}"><span th:text="${product.imageUrl}"> </span>
                                 </a>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
         <div class="card">
             <p class="login-box-msg">카트에 넣기</p>
             <form method="post" th:object="${sCartForm}" th:action="@{/cart/add}">
-                <input type="hidden" id="productid" name="productid" th:value="${product.id}" class="form-control">
+                <input type="hidden" id="id" name="id" th:value="${product.id}" class="form-control">
                 <input type="number" id="quantity" name="quantity" th:field="*{quantity}" class="form-control"
                     placeholder="물건 수량" required min="1" step="1">
                 <div class="input-group mb-3">

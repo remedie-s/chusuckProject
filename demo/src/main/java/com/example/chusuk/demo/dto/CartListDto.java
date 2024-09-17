@@ -10,7 +10,7 @@ public class CartListDto {
     private Integer id;
     private String imageUrl;
     private String productName;
-    private Long Price;
+    private Long price;
     private Integer quantity;
     private Long subtotal;
 }

@@ -35,25 +35,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="product, idx : ${productslist}"> <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
+                            <tr th:each="product, idx : ${productsList}"> <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
                                 <td>
                                     <span th:text="${product.id}"></span>
                                 </td>
                                 <td>
                                     <a th:href="@{|/product/detail/${ product.id }|}" > 
-                                    <img th:src="${product.image_url}"width="100" height="100"/></a>
+                                    <img th:src="${product.imageUrl}"width="100" height="100"/></a>
                                 </td>
                                 <td>
-                                    <span th:text="${product.product_name}"></span>
+                                    <span th:text="${product.productName}"></span>
                                 </td>
                                 <td>
                                     <span th:text="${product.description}"></span>
                                 </td>
                                 <td>
-                                    <span th:text="${product.product_price}"></span>
+                                    <span th:text="${product.price}"></span>
                                 </td>
                                 <td>
-                                    <span th:text="${product.product_quantity}"></span>
+                                    <span th:text="${product.quantity}"></span>
                                 </td>
                                 <td>
                                     <a th:href="@{|/product/delete/${ product.id }|}" >   삭제  </a>

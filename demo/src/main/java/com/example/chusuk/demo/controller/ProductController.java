@@ -36,8 +36,8 @@ public class ProductController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        List<Product> productslist = this.productService.getAllProduct();
-        model.addAttribute("productslist", productslist);
+        List<Product> productsList = this.productService.getAllProduct();
+        model.addAttribute("productsList", productsList);
         // for (Product product : productslist) {
         // System.out.println(product);
         // }
