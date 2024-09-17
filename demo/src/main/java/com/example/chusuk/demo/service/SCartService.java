@@ -45,7 +45,7 @@ public class SCartService {
 
     public List<SCart> findBySuserId(Integer userid) {
 
-        List<SCart> carts = this.sCartRepository.findBySUserId(userid);
+        List<SCart> carts = this.sCartRepository.findBySUser_Id(userid);
         if (carts.isEmpty()) {
             throw new DataNotFoundException("cart 가 없어요");
         }
@@ -54,7 +54,7 @@ public class SCartService {
 
     @Transactional
     public void deleteByUserId(Integer userid) {
-        List<SCart> carts = this.sCartRepository.findBySUserId(userid);
+        List<SCart> carts = this.sCartRepository.findBySUser_Id(userid);
         if (carts.isEmpty()) {
             throw new DataNotFoundException("cart 가 없어요");
         }

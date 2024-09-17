@@ -1,6 +1,7 @@
 package com.example.chusuk.demo.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -49,6 +50,9 @@ public class ProductController {
         PReviewForm pReviewForm = new PReviewForm();
         Product product = this.productService.findById(id);
         List<PReview> reviewList = this.pReviewService.findByProductId(id);
+        if (reviewList.isEmpty()) {
+            reviewList = new ArrayList<>();
+        }
 
         model.addAttribute("product", product);
         model.addAttribute("reviewlist", reviewList);

@@ -23,7 +23,7 @@ public class SOrderService {
     }
 
     public Page<SOrder> findBySUserId(Integer userid, Pageable pageable) {
-        Page<SOrder> orders = this.sOrderRepository.findBySUserId(userid, pageable);
+        Page<SOrder> orders = this.sOrderRepository.findBySUser_Id(userid, pageable);
         if (orders.isEmpty()) {
             throw new DataNotFoundException("order 가 없어요");
         }
@@ -52,7 +52,7 @@ public class SOrderService {
     }
 
     public List<SOrder> findBySUserId(Integer userid) {
-        List<SOrder> orders = this.sOrderRepository.findBySUserId(userid);
+        List<SOrder> orders = this.sOrderRepository.findBySUser_Id(userid);
         if (orders.isEmpty()) {
             throw new DataNotFoundException("order 가 없어요");
         }

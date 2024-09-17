@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.chusuk.demo.entity.QPost;
 
-public interface QPostRepository extends JpaRepository<QPost, Long> {
+public interface QPostRepository extends JpaRepository<QPost, Integer> {
 
 }
