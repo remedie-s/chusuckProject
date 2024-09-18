@@ -62,14 +62,12 @@ public class SOrderController {
         SUser user = sUserService.findByUsername(name);
         Integer userId = user.getId();
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
-
-        Page<SOrder> sOrderPage = sOrderService.findBySUserId(userId, pageable);
+        Page<SOrder> sOrderPage = this.sOrderService.findBySUserId(userId, pageable);
         ArrayList<OrderListDto> orderList = new ArrayList<>();
         Long orderSum = 0L;
         for (SOrder sOrder : sOrderPage.getContent()) {
             OrderListDto orderListDto = new OrderListDto();
             orderListDto.setProduct(sOrder.getProduct());
-            System.out.println(sOrder.getProduct());
             orderListDto.setSOrder(sOrder);
             orderListDto.setSUser(sOrder.getSUser());
             orderListDto.setSubtotal(sOrder.getQuantity() * sOrder.getProduct().getPrice());

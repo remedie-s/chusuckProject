@@ -3,6 +3,8 @@ package com.example.chusuk.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.chusuk.demo.entity.SCart;
@@ -46,6 +48,14 @@ public class SCartService {
     public List<SCart> findBySuserId(Integer userid) {
 
         List<SCart> carts = this.sCartRepository.findBySUser_Id(userid);
+        if (carts.isEmpty()) {
+            throw new DataNotFoundException("cart 가 없어요");
+        }
+        return carts;
+    }
+
+    public Page<SCart> findBySUserId(Integer userid, Pageable pageable) {
+        Page<SCart> carts = this.sCartRepository.findBySUser_Id(userid, pageable);
         if (carts.isEmpty()) {
             throw new DataNotFoundException("cart 가 없어요");
         }

@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.chusuk.demo.dto.CartListDto;
 import com.example.chusuk.demo.dto.SCartForm;
@@ -44,25 +48,17 @@ public class SCartController {
     }
 
     @GetMapping("/list/{id}")
-    public String list(@PathVariable("id") Integer id, Model model,
+    public String list(@PathVariable("id") Integer id, @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size, Model model,
             Principal principal) {
         String name = principal.getName();
         SUser user = this.sUserService.findByUsername(name);
         Integer userid = user.getId();
-        List<SCart> scart;
-        try {
-            scart = this.sCartService.findBySuserId(userid);
-            if (scart == null) {
-                scart = new ArrayList<>();
-            }
-        } catch (Exception e) {
-            scart = new ArrayList<>();
-            e.printStackTrace();
-            return "index";
-        }
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
+        Page<SCart> sCartPage = this.sCartService.findBySUserId(userid, pageable);
         ArrayList<CartListDto> cartlist = new ArrayList<>();
         long cartsum = 0;
-        for (SCart sCart : scart) {
+        for (SCart sCart : sCartPage.getContent()) {
             CartListDto cartListDto = new CartListDto();
             cartListDto.setId(sCart.getProduct().getId());
             cartListDto.setImageUrl(sCart.getProduct().getImageUrl());
@@ -78,6 +74,9 @@ public class SCartController {
 
         model.addAttribute("cartsum", cartsum);
         model.addAttribute("cartlist", cartlist);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", sCartPage.getTotalPages());
+        model.addAttribute("totalItems", sCartPage.getTotalElements());
         return "cart_list";
     }
 

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.chusuk.demo.entity.Product;
@@ -20,6 +22,10 @@ public class ProductService {
     public List<Product> getAllProduct() {
 
         return this.productRepository.findAll();
+    }
+
+    public Page<Product> getAllProductPage(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public Product create(String productName, String description, Long price, Integer quantity, Integer category,

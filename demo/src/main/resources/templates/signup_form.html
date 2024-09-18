@@ -1,107 +1,28 @@
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in</title>
+<!-- 상속을 통해 레이아웃 적용 -->
+<html layout:decorate="~{lib/layout}">
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
-</head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>미니프로젝트</b>쇼핑몰</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">회원가입</p>
+<div layout:fragment="content" class="wrapper">
 
-     <form method="post" th:object="${sUserForm}" th:action="@{/suser/signup}">		
-		
-        <div class="input-group mb-3">
-        <input type="text" id="username"  th:field="*{username}" class="form-control" placeholder="아이디" required> 
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" id="password1" th:field="*{password1}" class="form-control" placeholder="비밀번호" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-		<div class="input-group mb-3">
-          <input type="password" id="password2" th:field="*{password2}" class="form-control" placeholder="비밀번호 확인" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" id="firstName" th:field="*{firstName}" class="form-control" placeholder="이름" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" id="lastName" th:field="*{lastName}" class="form-control" placeholder="성" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-            
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" id="phoneNumber"  th:field="*{phoneNumber}" class="form-control" placeholder="전화번호" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-email"></span>
-            </div>
-          </div>
-        </div>
-		
-		
-		<div class="input-group mb-3">
-          <input type="email" id="eMail" th:field="*{eMail}" class="form-control" placeholder="이메일" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-email"></span>
-            </div>
-          </div>
-        </div>
-		<div class="input-group mb-3">
-			<input type="reset" value="초기화" class="btn btn-warning">
-			&nbsp;
-			<input type="submit" value="회원가입" class="btn btn-warning"> 
-		</div>
-      </form>
-      
-    </div>
-  </div>
+    <!-- Navbar -->
+    <div th:replace="~{lib/navibar.html :: sagment_navi}"></div>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <div th:replace="~{lib/left.html :: sagment_left}"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <div th:replace="~{pages/signup_form_content.html :: frag_index_content}"></div>
+
+    <!-- /.content-wrapper -->
+    <div th:replace="~{lib/right_sidebar.html :: sagment_aside}"></div>
+
+    <!-- Control Sidebar -->
+    <div th:replace="~{lib/footer.html :: sagment_footer}"></div>
+    <!-- /.control-sidebar -->
+
+
 </div>
-<!-- /.login-box -->
 
-<!-- jQuery -->
-<script src="/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/dist/js/adminlte.min.js"></script>
-</body>
 </html>

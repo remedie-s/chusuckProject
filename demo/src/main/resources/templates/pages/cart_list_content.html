@@ -78,6 +78,36 @@
               </tr>
             </tbody>
           </table>
+          <div class="pagination"></div>
+            <ul class="pagination">
+              <li th:if="${currentPage > 0}" class="page-item">
+                <a
+                  th:href="@{/cart/list/{id}(id=${id}, page=${currentPage - 1}, size=${size})}"
+                  class="page-link"
+                  >Previous</a
+                >
+              </li>
+              <li
+                th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                class="page-item"
+              >
+                <a
+                  th:href="@{/cart/list/{id}(id=${id}, page=${pageNum}, size=${size})}"
+                  class="page-link"
+                  th:text="${pageNum + 1}"
+                ></a>
+              </li>
+              <li th:if="${currentPage < totalPages - 1}" class="page-item">
+                <a
+                  th:href="@{/cart/list/{id}(id=${id}, page=${currentPage + 1}, size=${size})}"
+                  class="page-link"
+                  >Next</a
+                >
+              </li>
+            </ul>
+          </div>  
+
+
         </div>
       </div>
     </div>

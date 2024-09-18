@@ -3,6 +3,9 @@ package com.example.chusuk.demo.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.chusuk.demo.dto.PReviewForm;
 import com.example.chusuk.demo.dto.ProductForm;
@@ -37,12 +41,19 @@ public class ProductController {
     private final PReviewService pReviewService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Product> productsList = this.productService.getAllProduct();
+    public String list(@RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size, Model model) {
+
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
+        Page<Product> productPage = this.productService.getAllProductPage(pageable);
+
+        List<Product> productsList = productPage.getContent();
+
         model.addAttribute("productsList", productsList);
-        // for (Product product : productslist) {
-        // System.out.println(product);
-        // }
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("totalItems", productPage.getTotalElements());
+
         return "product_list";
     }
 
