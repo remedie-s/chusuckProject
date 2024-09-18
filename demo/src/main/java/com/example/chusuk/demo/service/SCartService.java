@@ -58,6 +58,6 @@ public class SCartService {
         if (carts.isEmpty()) {
             throw new DataNotFoundException("cart 가 없어요");
         }
-        carts.clear();
+        this.sCartRepository.deleteAll(carts);
     }
 }

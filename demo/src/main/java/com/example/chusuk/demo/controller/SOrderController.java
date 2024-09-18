@@ -156,27 +156,14 @@ public class SOrderController {
     }
 
     @GetMapping("/seller/list")
-    public String orderSellerList(Principal principal,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
-            Model model) {
-
+    public String orderSellerList(@RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size, Model model, Principal principal) {
         if (!principal.getName().equals("seller") && !principal.getName().equals("admin")) {
             return "order_list";
         }
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
-        Page<SOrder> sOrderPage;
-        try {
-            sOrderPage = this.sOrderService.getAllOrder(pageable);
-            if (sOrderPage == null) {
-                sOrderPage = Page.empty();
-            }
-        } catch (Exception e) {
-            sOrderPage = Page.empty();
-            e.printStackTrace();
-            return "index";
-        }
+        Page<SOrder> sOrderPage = this.sOrderService.getAllOrder(pageable);
 
         ArrayList<OrderListDto> orderList = new ArrayList<>();
         Long orderSum = 0L;
@@ -200,7 +187,6 @@ public class SOrderController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", sOrderPage.getTotalPages());
         model.addAttribute("totalItems", sOrderPage.getTotalElements());
-
         return "order_seller_list";
     }
 
@@ -215,17 +201,7 @@ public class SOrderController {
         }
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
-        Page<SOrder> sOrderPage;
-        try {
-            sOrderPage = this.sOrderService.getAllOrder(pageable);
-            if (sOrderPage == null) {
-                sOrderPage = Page.empty();
-            }
-        } catch (Exception e) {
-            sOrderPage = Page.empty();
-            e.printStackTrace();
-            return "index";
-        }
+        Page<SOrder> sOrderPage = this.sOrderService.getAllOrder(pageable);
 
         ArrayList<OrderListDto> orderList = new ArrayList<>();
         Long orderSum = 0L;
@@ -233,7 +209,6 @@ public class SOrderController {
             if (sOrder.getStatus().equals(3)) {
                 OrderListDto orderListDto = new OrderListDto();
                 orderListDto.setProduct(sOrder.getProduct());
-                System.out.println(sOrder.getProduct());
                 orderListDto.setSOrder(sOrder);
                 orderListDto.setSUser(sOrder.getSUser());
                 orderListDto.setSubtotal(sOrder.getQuantity() * sOrder.getProduct().getPrice());
@@ -249,7 +224,6 @@ public class SOrderController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", sOrderPage.getTotalPages());
         model.addAttribute("totalItems", sOrderPage.getTotalElements());
-
         return "order_seller_list";
     }
 

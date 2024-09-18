@@ -7,16 +7,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
-@ToString
 @NoArgsConstructor
 public class SOrder {
     @Id
@@ -29,6 +26,6 @@ public class SOrder {
     private LocalDateTime createDate;
     @ManyToOne
     private SUser sUser;
-    @OneToOne
+    @ManyToOne
     private Product product;
 }

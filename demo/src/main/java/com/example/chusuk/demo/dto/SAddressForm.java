@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SAddressForm {
-
+    private Integer id;
     @NotEmpty
     private String streetName;
     @NotEmpty

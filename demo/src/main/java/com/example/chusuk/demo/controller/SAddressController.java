@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.chusuk.demo.dto.SAddressForm;
@@ -42,6 +41,7 @@ public class SAddressController {
         String name = principal.getName();
         SUser user = sUserService.findByUsername(name);
         List<SAddress> addresslist = user.getAddressList();
+        System.out.println(addressList(principal));
         model.addAttribute("addresslist", addresslist);
         return "address_list";
     }
@@ -59,7 +59,7 @@ public class SAddressController {
         SUser user = sUserService.findByUsername(name);
         Integer id = user.getId();
         model.addAttribute("sAddressForm", new SAddressForm());
-        return "addressform";
+        return "address_form";
     }
 
     @PostMapping("/create")
@@ -87,27 +87,33 @@ public class SAddressController {
             Principal principal) {
         String name = principal.getName();
         SUser user = sUserService.findByUsername(name);
-        id = user.getId();
         SAddress sAddress = this.sAddressService.getoneAddress(id);
+        sAddressForm.setId(id);
         sAddressForm.setBuildingNumber(sAddress.getBuildingNumber());
         sAddressForm.setStreetName(sAddress.getStreetName());
         sAddressForm.setDetailAddress(sAddress.getDetailAddress());
         sAddressForm.setCity(sAddress.getCity());
-        model.addAttribute("method", "put");
-        return "address_form";
+        model.addAttribute("sAddressForm", sAddressForm);
+        return "addressModifyForm";
     }
 
-    @PutMapping("/modify/{id}")
+    @PostMapping("/modify/{id}")
     public String AddressModify(@Valid SAddressForm sAddressForm, BindingResult bindingResult,
             @PathVariable("id") Integer id) {
         if (bindingResult.hasErrors()) {
-            return "address_form";
+            return "addressModifyForm";
         }
+        System.out.println("수정하려는 주소 아이디 :" + id);
         SAddress sAddress = this.sAddressService.getoneAddress(id);
+        if (sAddress == null) {
+            // 주소가 존재하지 않는 경우에 대한 처리
+            return "redirect:/address/list";
+        }
         sAddress.setBuildingNumber(sAddressForm.getBuildingNumber());
         sAddress.setStreetName(sAddressForm.getStreetName());
         sAddress.setDetailAddress(sAddressForm.getDetailAddress());
         sAddress.setCity(sAddressForm.getCity());
+        System.out.println(sAddress.getId());
         this.sAddressService.modify(sAddress);
         return "redirect:/address/list";
     }

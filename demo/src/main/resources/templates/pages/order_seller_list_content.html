@@ -36,19 +36,22 @@
                 <th>제품별총가격</th>
                 <th>주문 상태</th>
                 <th>주문시간</th>
+                <th>주문한 사람</th>
                 <th>주문승인</th>
-                <th>주문완료</th>
+                <th>배송완료</th>
+                <th>주문닫힘</th>
+                <th>주문삭제</th>
               </tr>
             </thead>
             <tbody>
-              <tr th:each="orderListDto, idx : ${orderlist}">
+              <tr th:each="orderListDto, idx : ${orderList}">
                 <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
                 <td>
                   <span th:text="${orderListDto.sOrder.id}"></span>
                 </td>
                 <td>
                   <img
-                  th:src="${orderListDto.product.imageUrl}"
+                    th:src="${orderListDto.product.imageUrl}"
                     alt="Product Image"
                     style="width: 100px; height: auto"
                   />
@@ -70,23 +73,77 @@
                   <span th:case="1"> 주문승인 </span>
                   <span th:case="2"> 배송도착 </span>
                   <span th:case="3"> 주문닫힘 </span>
+                  <span th:case="10"> 반품 </span>
+                  <span th:case="*"> 상태 불명 </span>
                 </td>
                 <td>
                   <span th:text="${orderListDto.sOrder.createDate}"></span>
                 </td>
                 <td>
-                  <a th:href="@{|/order/accecpt/${ orderListDto.sOrder.id }|}">
+                  <span th:text="${orderListDto.sUser.id}"></span>
+                </td>
+                <td>
+                  <a th:href="@{|/order/accept/${ orderListDto.sOrder.id }|}">
                     주문승인
                   </a>
                 </td>
                 <td>
-                  <a th:href="@{|/order/end/${ orderListDto.orderid }|}">
-                    주문완료
+                  <a th:href="@{|/order/arrive/${ orderListDto.sOrder.id }|}">
+                    배송완료
+                  </a>
+                </td>
+                <td>
+                  <a th:href="@{|/order/end/${ orderListDto.sOrder.id }|}">
+                    주문닫힘
+                  </a>
+                </td>
+                <td>
+                  <a th:href="@{|/order/delete/${orderListDto.sOrder.id }|}">
+                    주문삭제
                   </a>
                 </td>
               </tr>
             </tbody>
           </table>
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li
+                class="page-item"
+                th:classappend="${currentPage == 0} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/order/seller/list(page=${currentPage - 1}, size=${size})}"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li
+                class="page-item"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/order/seller/list(page=${i}, size=${size})}"
+                  th:text="${i + 1}"
+                ></a>
+              </li>
+              <li
+                class="page-item"
+                th:classappend="${currentPage == totalPages - 1} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/order/seller/list(page=${currentPage + 1}, size=${size})}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
 
           <a th:href="@{/order/seller/list}" class="btn btn-primary">
             관리자 관리
@@ -102,7 +159,7 @@
         <div class="col-sm-6">
           <h3 class="m-0">
             주문 총 가격 <br />
-            <span th:text="|${ordersum}원|"> </span>
+            <span th:text="|${orderSum}원|"> </span>
           </h3>
         </div>
       </div>
