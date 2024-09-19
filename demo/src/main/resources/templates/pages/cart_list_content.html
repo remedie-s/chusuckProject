@@ -49,35 +49,36 @@
               </tr>
             </thead>
             <tbody>
-              <tr th:each="cartlistdto, idx : ${cartlist}">
+              <tr th:each="cartListDto, idx : ${cartlist}">
                 <td>
-                  <span th:text="${cartlistdto.id}"></span>
+                  <span th:text="${cartListDto.id}"></span>
                 </td>
                 <td>
                   <img
-                    th:src="${cartlistdto.imageUrl}"
+                    th:src="${cartListDto.imageUrl}"
                     alt="Product Image"
                     style="width: 100px; height: auto"
                   />
                 </td>
                 <td>
-                  <span th:text="${cartlistdto.productName}"></span>
+                  <span th:text="${cartListDto.productName}"></span>
                 </td>
                 <td>
-                  <span th:text="${cartlistdto.price}"></span>
+                  <span th:text="${cartListDto.price}"></span>
                 </td>
                 <td>
-                  <span th:text="${cartlistdto.quantity}"></span>
+                  <span th:text="${cartListDto.quantity}"></span>
                 </td>
                 <td>
-                  <span th:text="${cartlistdto.subtotal}"></span>
+                  <span th:text="${cartListDto.subtotal}"></span>
                 </td>
                 <td>
-                  <a th:href="@{|/cart/delete/${cartlistdto.id}|}">삭제</a>
+                  <a th:href="@{|/cart/delete/${cartListDto.id}|}">삭제</a>
                 </td>
               </tr>
             </tbody>
           </table>
+          
           <div class="pagination"></div>
             <ul class="pagination">
               <li th:if="${currentPage > 0}" class="page-item">
@@ -105,24 +106,24 @@
                 >
               </li>
             </ul>
-          </div>  
-
-
+          </div> 
+          <div class="card">
+            <div class="card-body login-card-body">
+              <p class="login-box-msg">주문 등록</p>
+              <form method="post" th:action="@{/order/create}">
+                <div class="input-group mb-3">
+                  <input type="reset" value="초기화" class="btn btn-warning" />
+                  &nbsp;
+                  <input type="submit" value="주문" class="btn btn-warning" />
+                </div>
+              </form>
+            </div>
+          </div> 
         </div>
       </div>
     </div>
+    
   </section>
 
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">주문 등록</p>
-      <form method="post" th:action="@{/order/create}">
-        <div class="input-group mb-3">
-          <input type="reset" value="초기화" class="btn btn-warning" />
-          &nbsp;
-          <input type="submit" value="주문" class="btn btn-warning" />
-        </div>
-      </form>
-    </div>
-  </div>
+  
 </div>

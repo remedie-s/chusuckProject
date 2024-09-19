@@ -2,11 +2,11 @@
 <div th:fragment="frag_index_content" class="content-wrapper">
     <div class="card">
         <p class="login-box-msg">리뷰 입력</p>
-        <form method="post" th:object="${reviewForm}" th:action="@{/product/review/create/{id}(id=${product.id})}">
-            <input type="hidden" name="productid" th:value="${product.id}">
+        <form method="post" th:object="${pReviewForm}" th:action="@{/product/review/create/{id}(id=${product.id})}">
+            <input type="hidden" name="product" th:value="${product}">
 
             <div class="my-3">
-                <textarea name="contents" th:field="*{contents}" id="contents" class="form-control"
+                <textarea name="content" th:field="*{content}" id="content" class="form-control"
                     rows="4" placeholder="리뷰를 작성해 주세요" required></textarea>
             </div>
 

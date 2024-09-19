@@ -154,20 +154,20 @@ public class ProductController {
     @GetMapping("/review/create/{id}")
     public String reviewCreate(@PathVariable("id") Integer id, Principal principal, Model model) {
         Product product = this.productService.findById(id);
-        PReviewForm reviewForm = new PReviewForm();
+        PReviewForm pReviewForm = new PReviewForm();
         model.addAttribute("product", product);
-        model.addAttribute("reviewForm", reviewForm);
+        model.addAttribute("reviewForm", pReviewForm);
         return "product_review_form";
     }
 
     @PostMapping("/review/create/{id}")
-    public String reviewCreate(@PathVariable("id") Integer id, Model model, @Valid PReviewForm reviewForm,
+    public String reviewCreate(@PathVariable("id") Integer id, Model model, @Valid PReviewForm pReviewForm,
             BindingResult bindingResult,
             Principal principal) {
         String name = principal.getName();
         Integer userid = this.sUserService.findByUsername(name).getId();
-        Integer productid = id;
-        Product product = this.productService.findById(productid);
+
+        Product product = pReviewForm.getProduct();
         List<PUser> costomerList = product.getPUserList();
         System.out.println(costomerList);
         for (PUser pUser : costomerList) {
@@ -177,7 +177,7 @@ public class ProductController {
                     System.out.println("리뷰 쓰기 중 에러가 있어요!");
                     return "product_list";
                 }
-                this.pReviewService.create(reviewForm.getContent(), product, this.sUserService.findByUsername(name));
+                this.pReviewService.create(pReviewForm.getContent(), product, this.sUserService.findByUsername(name));
                 System.out.println("리뷰 등록 완료");
                 return "redirect:/product/detail/" + id;
             }
