@@ -155,6 +155,7 @@ public class ProductController {
     public String reviewCreate(@PathVariable("id") Integer id, Principal principal, Model model) {
         Product product = this.productService.findById(id);
         PReviewForm pReviewForm = new PReviewForm();
+        pReviewForm.setProduct(product);
         model.addAttribute("product", product);
         model.addAttribute("reviewForm", pReviewForm);
         return "product_review_form";
@@ -164,24 +165,22 @@ public class ProductController {
     public String reviewCreate(@PathVariable("id") Integer id, Model model, @Valid PReviewForm pReviewForm,
             BindingResult bindingResult,
             Principal principal) {
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("리뷰 쓰기 중 에러가 있어요!");
+            return "product_list";
+        }
         String name = principal.getName();
         Integer userid = this.sUserService.findByUsername(name).getId();
-
         Product product = pReviewForm.getProduct();
         List<PUser> costomerList = product.getPUserList();
         System.out.println(costomerList);
         for (PUser pUser : costomerList) {
-
             if (userid == pUser.getId()) {
-                if (bindingResult.hasErrors()) {
-                    System.out.println("리뷰 쓰기 중 에러가 있어요!");
-                    return "product_list";
-                }
                 this.pReviewService.create(pReviewForm.getContent(), product, this.sUserService.findByUsername(name));
                 System.out.println("리뷰 등록 완료");
                 return "redirect:/product/detail/" + id;
             }
-
         }
         System.out.println("리뷰쓰기 권한이 없어요!");
         return "product_list";

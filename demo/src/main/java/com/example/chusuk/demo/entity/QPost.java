@@ -29,6 +29,7 @@ public class QPost {
     private String subject;
     private String content;
     private LocalDateTime createDate;
+    private Integer qnaStatus;
     @ManyToOne
     private SUser sUser;
     @JsonIgnore

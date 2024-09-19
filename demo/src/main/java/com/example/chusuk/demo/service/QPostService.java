@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.chusuk.demo.entity.QPost;
@@ -18,6 +20,21 @@ import lombok.RequiredArgsConstructor;
 public class QPostService {
 
     private final QPostRepository qPostRepository;
+
+    public Page<QPost> getAllOrder(Pageable pageable) {
+        return this.qPostRepository.findAll(pageable);
+    }
+
+    public Page<QPost> findBySUser_Id(Integer userid, Pageable pageable) {
+        Page<QPost> qpostList = this.qPostRepository.findAllBySUser_Id(userid, pageable);
+        if (qpostList.isEmpty()) {
+
+            throw new DataNotFoundException("QnA Post 가 없어요");
+
+        }
+        return qpostList;
+
+    }
 
     public QPost findById(Integer id) {
         Optional<QPost> byId = this.qPostRepository.findById(id);
@@ -37,6 +54,7 @@ public class QPostService {
         qPost.setSubject(subject);
         qPost.setSUser(sUser);
         qPost.setCreateDate(LocalDateTime.now());
+        qPost.setQnaStatus(0);
         this.qPostRepository.save(qPost);
         return qPost;
     }
@@ -47,6 +65,12 @@ public class QPostService {
 
     public void modify(QPost qPost) {
         this.qPostRepository.save(qPost);
+    }
+
+    public List<QPost> findBySUser_Id(Integer userid) {
+        List<QPost> qpostList = this.qPostRepository.findAllBySUser_Id(userid);
+        return qpostList;
+
     }
 
 }
