@@ -30,18 +30,29 @@ public class QReviewController {
     private final SUserService sUserService;
 
     @GetMapping("/create/{id}")
+    public String create(@PathVariable("id") Integer id, Principal principal, Model model) {
+        String username = principal.getName();
+        QPost qpost = this.qPostService.findById(id);
+        model.addAttribute("qpost", qpost);
+        model.addAttribute("username", username);
+        model.addAttribute("qReviewForm", new QReviewForm());
+
+        return "qna_review_form";
+    }
+
+    @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Integer id,
             @Valid QReviewForm reviewForm, BindingResult bindingResult, Principal principal) {
         String username = principal.getName();
         SUser sUser = this.sUserService.findByUsername(username);
 
         QPost post = this.qPostService.findById(id);
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("post", post);
             return "qna_detail";
         }
         this.qReviewService.create(post, reviewForm.getContent(), sUser);
-        return "redirect:/qnapost/detail/" + id;
+        return "redirect:/qpost/detail/" + id;
     }
 
     @GetMapping("/delete/{id}")

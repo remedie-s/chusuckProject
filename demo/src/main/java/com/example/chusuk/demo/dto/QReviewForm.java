@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QReviewForm {
+    private String username;
     @NotEmpty
     private String content;
 
