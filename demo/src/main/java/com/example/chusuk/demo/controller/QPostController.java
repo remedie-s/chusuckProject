@@ -1,6 +1,8 @@
 package com.example.chusuk.demo.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +45,7 @@ public class QPostController {
         String username = principal.getName();
         SUser sUser = this.sUserService.findByUsername(username);
         Integer id = sUser.getId();
-        // List<QPost> postlist = this.qPostService.findBySUser_Id(userid);
-        // model.addAttribute("postlist", postlist);
-        // return "qna_post_list";
+
         return "redirect:/qpost/list/" + id;
     }
 
@@ -60,7 +60,11 @@ public class QPostController {
         if (qPostPage.isEmpty()) {
             throw new DataNotFoundException("qna가 비었어요");
         }
-        model.addAttribute("qPostPage", qPostPage);
+        List<QPost> qpostList = new ArrayList<>();
+        for (QPost qPost : qPostPage) {
+            qpostList.add(qPost);
+        }
+        model.addAttribute("qpostList", qpostList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", qPostPage.getTotalPages());
         model.addAttribute("totalItems", qPostPage.getTotalElements());
@@ -75,7 +79,14 @@ public class QPostController {
         if (username.equals("seller") || username.equals("admin")) {
             PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createDate"));
             Page<QPost> qPostPage = this.qPostService.getAllOrder(pageable);
-            model.addAttribute("qPostPage", qPostPage);
+            List<QPost> qpostList = new ArrayList<>();
+            for (QPost qPost : qPostPage) {
+                qpostList.add(qPost);
+            }
+            model.addAttribute("qpostList", qpostList);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", qPostPage.getTotalPages());
+            model.addAttribute("totalItems", qPostPage.getTotalElements());
             return "qna_post_list";
         } else {
             log.info("당신은 관리자이거나 셀러가 아닙니다.");
@@ -86,21 +97,19 @@ public class QPostController {
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id,
             QReviewForm reviewForm, Principal principal) {
-        QPost post = this.qPostService.findById(id);
+        QPost qpost = this.qPostService.findById(id);
         String username = principal.getName();
-        model.addAttribute("post", post);
+        model.addAttribute("qpost", qpost);
         model.addAttribute("username", username);
         return "qna_post_detail";
     }
 
     @GetMapping("/create")
-    public String create(Model model, QPostForm qPostForm, Principal principal) {
+    public String create(Model model, Principal principal) {
         SUser user = this.sUserService.findByUsername(principal.getName());
-        qPostForm = new QPostForm();
-        String method = "post";
+        model.addAttribute("qPostForm", new QPostForm());
         model.addAttribute("user", user);
-        model.addAttribute("qPostForm", qPostForm);
-        model.addAttribute("method", method);
+        model.addAttribute("method", "post");
 
         return "qna_post_form";
     }
@@ -124,8 +133,7 @@ public class QPostController {
         QPost qPost = this.qPostService.findById(id);
         qPostForm.setSubject(qPost.getSubject());
         qPostForm.setContent(qPost.getContent());
-        String method = "put";
-        model.addAttribute("method", method);
+        model.addAttribute("method", "put");
         model.addAttribute("qPostForm", qPostForm);
         return "qna_post_form";
     }

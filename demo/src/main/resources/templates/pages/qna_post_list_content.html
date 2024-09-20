@@ -36,7 +36,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr th:each="qPost, idx : ${postlist}">
+              <tr th:each="qPost, idx : ${qpostList}">
                 <!--  반복되는 가장 상위 요소 <= 반복문 적용 -->
                 <td>
                   <a th:href="@{|/qpost/detail/${qPost.id}|}">
@@ -76,23 +76,23 @@
                 class="page-item"
               >
                 <a
-                  th:href="@{/qPost/list/{id}(id=${id}, page=${pageNum}, size=${size})}"
+                  th:href="@{/qpost/list/{id}(id=${id}, page=${pageNum}, size=${size})}"
                   class="page-link"
                   th:text="${pageNum + 1}"
                 ></a>
               </li>
               <li th:if="${currentPage < totalPages - 1}" class="page-item">
                 <a
-                  th:href="@{/qPost/list/{id}(id=${id}, page=${currentPage + 1}, size=${size})}"
+                  th:href="@{/qpost/list/{id}(id=${id}, page=${currentPage + 1}, size=${size})}"
                   class="page-link"
                   >Next</a
                 >
               </li>
             </ul>
           </div>
-          <a th:href="@{/qPost/create}" class="btn btn-primary">문의 등록</a>
+          <a th:href="@{/qpost/create}" class="btn btn-primary">문의 등록</a>
 
-          <a th:href="@{/qPost/seller/list}" class="btn btn-danger">
+          <a th:href="@{/qpost/seller/list}" class="btn btn-danger">
             관리자 관리
           </a>
         </div>

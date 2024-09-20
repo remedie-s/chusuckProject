@@ -2,7 +2,7 @@
 <div th:fragment="frag_index_content" class="content-wrapper">
   <div class="card">
     <p class="login-box-msg">QnA 접수</p>
-    <form method="${method}" th:object="${pReviewForm}" th:action="@{/qpost/create}">
+    <form th:method="${method}" th:object="${qPostForm}" th:action="@{/qpost/create}">
       <div class="my-3">
         <input type="text" name="subject" id="subject" placeholder="문의 주제를 작성해주세요" required />
       </div>

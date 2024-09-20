@@ -29,7 +29,7 @@ public class QReviewController {
     private final QReviewService qReviewService;
     private final SUserService sUserService;
 
-    @PostMapping("/create/{id}")
+    @GetMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Integer id,
             @Valid QReviewForm reviewForm, BindingResult bindingResult, Principal principal) {
         String username = principal.getName();

@@ -14,7 +14,9 @@ import com.example.chusuk.demo.exception.DataNotFoundException;
 import com.example.chusuk.demo.repository.QPostRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QPostService {
@@ -55,6 +57,7 @@ public class QPostService {
         qPost.setSUser(sUser);
         qPost.setCreateDate(LocalDateTime.now());
         qPost.setQnaStatus(0);
+        log.info("큐엔에이를 저장 시도중입니다");// TODO
         this.qPostRepository.save(qPost);
         return qPost;
     }
